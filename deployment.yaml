@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: devopstask04
-          image: shandeep04/docker_task4:latest
+          image: shandeep04/docker_final_Project:latest
           ports:
             - containerPort: 80
