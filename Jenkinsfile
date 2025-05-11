@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Adjust to actual Minikube owner's paths
-        KUBECONFIG = "/home/shandeep/.kube/config"
-        MINIKUBE_HOME = "/home/shandeep/.minikube"
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
+        MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
     }
 
     stages {
@@ -12,7 +11,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    set -e  # Exit on error
+                    set -e
 
                     echo "🔄 Switching to Minikube context..."
                     kubectl config use-context minikube
@@ -26,7 +25,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    set -e  # Exit on error
+                    set -e
 
                     echo "🚀 Deploying Application..."
                     kubectl apply -f deployment.yaml --validate=false
