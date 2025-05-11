@@ -10,43 +10,71 @@ export KUBECONFIG=$HOME/.kube/config  # Update path if required
 echo "🔄 Switching to Minikube context..."
 kubectl config use-context minikube
 
-# Docker build process
-echo "⚙️ Building the Docker image..."
-docker build -t shandeep04/docker_final_Project .
+# ---- FRONTEND ----
+echo "⚙️ Building the FRONTEND Docker image..."
+docker build -t shandeep04/docker_final_frontend -f Dockerfile.frontend .
+
+# ---- BACKEND ----
+echo "⚙️ Building the BACKEND Docker image..."
+docker build -t shandeep04/docker_final_backend -f Dockerfile.backend .
 
 # Docker login securely
 echo "🔑 Logging in to Docker Hub..."
 echo "shandeep-4621" | docker login -u "shandeep04" --password-stdin
 
-docker tag devops04 shandeep04/docker_final_Project:latest
+# Push both images
+echo "🚀 Pushing Docker images to Docker Hub..."
+docker push shandeep04/docker_final_frontend
+docker push shandeep04/docker_final_backend
 
-# Push the new image
-echo "🚀 Pushing the Docker image to Docker Hub..."
-docker push shandeep04/docker_final_Profile
-
-# Deploy to Minikube without using a separate YAML file
-echo "📦 Deploying to Minikube..."
+# ---- DEPLOY FRONTEND ----
+echo "📦 Deploying FRONTEND to Minikube..."
 
 kubectl apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devopstask04
+  name: frontend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: devopstask04
+      app: frontend
   template:
     metadata:
       labels:
-        app: devopstask04
+        app: frontend
     spec:
       containers:
-        - name: devopstask04
-          image: shandeep04/docker_final_Project
+        - name: frontend
+          image: shandeep04/docker_final_frontend
           ports:
             - containerPort: 80
 EOF
 
-echo "✅ Deployment completed successfully!"
+# ---- DEPLOY BACKEND ----
+echo "📦 Deploying BACKEND to Minikube..."
+
+kubectl apply -f - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: shandeep04/docker_final_backend
+          ports:
+            - containerPort: 80
+EOF
+
+echo "✅ Both frontend and backend deployments completed successfully!"
