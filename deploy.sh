@@ -12,17 +12,17 @@ kubectl config use-context minikube
 
 # Docker build process
 echo "⚙️ Building the Docker image..."
-docker build -t shandeep04/docker_task4 .
+docker build -t shandeep04/docker_final_Project .
 
 # Docker login securely
 echo "🔑 Logging in to Docker Hub..."
 echo "shandeep-4621" | docker login -u "shandeep04" --password-stdin
 
-docker tag devops04 shandeep04/docker_task4:latest
+docker tag devops04 shandeep04/docker_final_Project:latest
 
 # Push the new image
 echo "🚀 Pushing the Docker image to Docker Hub..."
-docker push shandeep04/docker_task4
+docker push shandeep04/docker_final_Profile
 
 # Deploy to Minikube without using a separate YAML file
 echo "📦 Deploying to Minikube..."
@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
         - name: devopstask04
-          image: shandeep04/docker_task4
+          image: shandeep04/docker_final_Project
           ports:
             - containerPort: 80
 EOF
