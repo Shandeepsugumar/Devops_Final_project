@@ -1,19 +1,74 @@
+# ----------------- Frontend Deployment -----------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devopstask04
+  name: frontend-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: devopstask04
+      app: frontend
   template:
     metadata:
       labels:
-        app: devopstask04
+        app: frontend
     spec:
       containers:
-        - name: devopstask04
-          image: shandeep04/docker_final_Project:latest
+        - name: frontend
+          image: shandeep04/docker_final_frontend:latest
           ports:
             - containerPort: 80
+
+---
+# ----------------- Frontend Service -----------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080  # You can change this if needed
+
+---
+# ----------------- Backend Deployment -----------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: shandeep04/docker_final_backend:latest
+          ports:
+            - containerPort: 80
+
+---
+# ----------------- Backend Service -----------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: NodePort
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30081  # You can change this if needed
