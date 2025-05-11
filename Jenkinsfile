@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "/var/lib/jenkins/.kube/config"
-        MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
+        // Adjust to actual Minikube owner's paths
+        KUBECONFIG = "/home/shandeep/.kube/config"
+        MINIKUBE_HOME = "/home/shandeep/.minikube"
     }
 
     stages {
